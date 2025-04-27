@@ -10,6 +10,7 @@ import com.Assessment.Library_management.util.EndPoints;
 import com.Assessment.Library_management.util.JwtUtil;
 import com.Assessment.Library_management.util.MessageVarList;
 import com.Assessment.Library_management.util.StatusVarList;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
@@ -39,11 +40,23 @@ public class TokenController {
 
 
 
-    private final UserDetailsService userDetailsService;
-    private final UserRepository userRepository;
+    private  UserDetailsService userDetailsService;
+    private UserRepository userRepository;
 
     private AuthenticationManager authenticationManager;
 
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+//    @Autowired
+//    public TokenController(JwtUtil jwtUtil, UserDetailsService userDetailsService, UserRepository userRepository, AuthenticationManager authenticationManager) {
+//        this.jwtUtil = jwtUtil;
+//        this.userDetailsService = userDetailsService;
+//        this.userRepository = userRepository;
+//        this.authenticationManager = authenticationManager;
+//    }
 
     @PostMapping(value = EndPoints.TOKEN, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getToken(@RequestBody AuthRequestDto authRequest) throws DataNotFounException {

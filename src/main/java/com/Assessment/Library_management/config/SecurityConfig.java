@@ -1,6 +1,7 @@
 package com.Assessment.Library_management.config;
 
 import com.Assessment.Library_management.filter.JwtFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -12,16 +13,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+
 public class SecurityConfig {
 
 
 
-    private final JwtFilter jwtFilter;
+    private final JwtFilter JwtFilter;
 
-    public SecurityConfig(JwtFilter jwtFilter) {
-        this.jwtFilter = jwtFilter;
+    @Autowired
+    public SecurityConfig(com.Assessment.Library_management.filter.JwtFilter jwtFilter) {
+        JwtFilter = jwtFilter;
     }
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -32,7 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/books/availableBooks").authenticated() //check availble books API dont need to authenticate , anyone can view
                         .anyRequest().authenticated() //All other APIs (except /auth/authenticate) must have a valid JWT token.
                 )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(JwtFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
 
 

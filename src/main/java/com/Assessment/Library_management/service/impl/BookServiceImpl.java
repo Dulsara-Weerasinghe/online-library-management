@@ -29,7 +29,7 @@ public class BookServiceImpl implements BookService {
 
     private static final Logger log = LoggerFactory.getLogger(BookController.class);
     @Autowired
-    private final BookRepository bookRepository;
+    private  BookRepository bookRepository;
     @Override
     public ResponseEntity<?> availableBooks() throws DataNotFounException {
         log.info("Available books");

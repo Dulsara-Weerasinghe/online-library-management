@@ -29,8 +29,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private  PasswordEncoder passwordEncoder;
+    private  UserRepository userRepository;
 
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);

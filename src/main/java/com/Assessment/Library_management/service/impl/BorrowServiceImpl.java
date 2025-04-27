@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,21 +35,22 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BorrowServiceImpl implements BorrowService {
     @Autowired
-    private final UserRepository userRepository;
+    private  UserRepository userRepository;
     @Autowired
-    private final BookRepository bookRepository;
+    private  BookRepository bookRepository;
 
     @Autowired
-    private final BorrowedRecordRepository borrowingRecordRepository;
+    private  BorrowedRecordRepository borrowingRecordRepository;
 
     private static final Logger log = LoggerFactory.getLogger(BorrowServiceImpl.class);
 
 
 
     @Override
+    @Transactional
     public ResponseEntity<?> borrowBooks(BorrowBookRequest borrowBookRequest) {
 
-        User user = userRepository.findByUserId(borrowBookRequest.getUserId())
+        User user = userRepository.findByuserId(borrowBookRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Book book = bookRepository.findByBookId(borrowBookRequest.getBookId())
@@ -74,11 +76,12 @@ public class BorrowServiceImpl implements BorrowService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> returnBooks(ReturnBooksRequest returnBooksRequest) {
 
         // Find borrow record where returnDate is null (That means not yet returned)
         BorrowingRecord record = borrowingRecordRepository
-                .findFirstByUserIdAndBookIdAndReturnDateIsNull(returnBooksRequest.getUserId(), returnBooksRequest.getBookId())
+                .findFirstByuser_userIdAndbook_bookIdAndReturnDateIsNull(returnBooksRequest.getUserId(), returnBooksRequest.getBookId())
                 .orElseThrow(() -> new RuntimeException("No borrowed book found to return"));
 
         record.setReturnDate(LocalDateTime.now());
@@ -96,7 +99,7 @@ public class BorrowServiceImpl implements BorrowService {
     @Override
     public ResponseEntity<?> borrowHistory(String userId) throws DataNotFounException {
 List<BorrowingRecordDTO> list = new ArrayList<>();
-        List<BorrowingRecord> records = borrowingRecordRepository.findByUser(userId).orElseThrow(()-> new DataNotFounException("Borrow history not found for the user"));
+        List<BorrowingRecord> records = borrowingRecordRepository.findByuser_userId(userId).orElseThrow(()-> new DataNotFounException("Borrow history not found for the user"));
         records.forEach(borrowingRecord -> {
             BorrowingRecordDTO borrowingRecordDTO = new BorrowingRecordDTO();
             borrowingRecordDTO.setBorrowDate(borrowingRecord.getBorrowDate());
