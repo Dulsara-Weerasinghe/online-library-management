@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
             newUser.setEmail(dto.getEmail());
             newUser.setPassword(bcryptPassword);
             newUser.setName(dto.getName());
+            newUser.setUserType("customer");
 
             User save = userRepository.save(newUser);
 //            return new ResponseBean(MessageVarList.RSP_SUCCESS, StatusVarList.SUCCESS,save.getId());
