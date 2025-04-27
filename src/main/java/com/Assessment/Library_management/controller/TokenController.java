@@ -44,6 +44,7 @@ public class TokenController {
 
     private AuthenticationManager authenticationManager;
 
+
     @PostMapping(value = EndPoints.TOKEN, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getToken(@RequestBody AuthRequestDto authRequest) throws DataNotFounException {
 
