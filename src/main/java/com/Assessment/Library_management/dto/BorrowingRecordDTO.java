@@ -17,14 +17,38 @@ public class BorrowingRecordDTO {
     private LocalDateTime borrowDate;
     private LocalDateTime returnDate;
 
+    public String getBookTitle() {
+        return bookTitle;
+    }
 
-    // Mapping from BorrowingRecord entity
-    public static BorrowingRecordDTO fromEntity(BorrowingRecord record) {
-        return new BorrowingRecordDTO(
-                record.getBook().getTitle(),
-                record.getBook().getAuthor(),
-                record.getBorrowDate(),
-                record.getReturnDate()
-        );
+    public void setBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public LocalDateTime getBorrowDate() {
+        return borrowDate;
+    }
+
+    public void setBorrowDate(LocalDateTime borrowDate) {
+        this.borrowDate = borrowDate;
+    }
+
+    public LocalDateTime getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(LocalDateTime returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public void getReturnDate(LocalDateTime returnDate) {
     }
 }

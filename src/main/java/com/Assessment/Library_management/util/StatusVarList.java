@@ -5,6 +5,7 @@ public class StatusVarList {
 
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILED = "FAILED";
+    public static final String ALREADY_REGISTERD = "already registered with us";
 
     public static final String AVAILABLE_BOOKS_NOT_FOUND= "Available books not found";
 

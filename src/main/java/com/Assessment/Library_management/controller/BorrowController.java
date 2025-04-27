@@ -10,8 +10,11 @@ import com.Assessment.Library_management.service.BorrowService;
 import com.Assessment.Library_management.util.EndPoints;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,20 +22,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/api/v1/borrow")
 @AllArgsConstructor
-@Slf4j
+
 public class BorrowController {
     @Autowired
     private static BorrowService borrowService;
 
-
+    private static final Logger log = LoggerFactory.getLogger(BorrowController.class);
     /**
      *
      *  API to Borrow Book
      */
 
     @PostMapping(value = EndPoints.BORROW_BOOK,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseBean borrowBooks(@RequestBody BorrowBookRequest borrowBookRequest) throws DataNotFounException {
-        log.debug("Borrow Book request" + borrowBookRequest);
+    public ResponseEntity<?> borrowBooks(@RequestBody BorrowBookRequest borrowBookRequest) throws DataNotFounException {
+        log.info("Borrow Book request" + borrowBookRequest);
         return borrowService.borrowBooks(borrowBookRequest);
     }
 
@@ -43,8 +46,8 @@ public class BorrowController {
      */
 
     @PostMapping(value = EndPoints.RETURN_BOOKS,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseBean returnBooks(@RequestBody ReturnBooksRequest returnBooksRequest) throws DataNotFounException {
-        log.debug("Return book request" + returnBooksRequest);
+    public ResponseEntity<?> returnBooks(@RequestBody ReturnBooksRequest returnBooksRequest) throws DataNotFounException {
+        log.info("Return book request" + returnBooksRequest);
         return borrowService.returnBooks(returnBooksRequest);
     }
 
@@ -55,8 +58,8 @@ public class BorrowController {
      * Borrow History
      */
     @PostMapping(value = EndPoints.BORROW_HISTORY,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseBean borrowHistory(@PathVariable("userId") String userId) throws DataNotFounException {
-        log.debug("Borrow History" + userId);
+    public ResponseEntity<?> borrowHistory(@PathVariable("userId") String userId) throws DataNotFounException {
+        log.info("Borrow History" + userId);
         return borrowService.borrowHistory(userId);
     }
 }

@@ -1,5 +1,6 @@
 package com.Assessment.Library_management.service.impl;
 
+import com.Assessment.Library_management.controller.BookController;
 import com.Assessment.Library_management.dto.ResponseBean;
 import com.Assessment.Library_management.dto.SignUpRequestBean;
 import com.Assessment.Library_management.entity.User;
@@ -10,7 +11,10 @@ import com.Assessment.Library_management.util.StatusVarList;
 import com.Assessment.Library_management.util.Utility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Slf4j
+
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -29,14 +33,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
 
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+
 
     @Override
     @Transactional
-    public ResponseBean userSignUp(SignUpRequestBean dto) {
+    public ResponseEntity<?> userSignUp(SignUpRequestBean dto) {
         if (!checkUserNameExists(dto.getUserName())) {
             String bcryptPassword = Utility.getBCryptPasswordEncoder(passwordEncoder, dto.getPassword());
 
-            log.debug("New user Registration");
+            log.info("New user Registration");
             User newUser = new User();
             newUser.setUserId(Utility.generateUserId());
             newUser.setUserName(dto.getUserName());
@@ -46,9 +52,11 @@ public class UserServiceImpl implements UserService {
             newUser.setName(dto.getName());
 
             User save = userRepository.save(newUser);
-            return new ResponseBean(MessageVarList.RSP_SUCCESS, StatusVarList.SUCCESS,save.getId());
+//            return new ResponseBean(MessageVarList.RSP_SUCCESS, StatusVarList.SUCCESS,save.getId());
+            return ResponseEntity.ok(save.getId());
         }else{
-            return new ResponseBean(MessageVarList.RSP_NO_DATA_FOUND, StatusVarList.FAILED,null);
+            return ResponseEntity.ok(StatusVarList.ALREADY_REGISTERD);
+//            return new ResponseBean(MessageVarList.RSP_NO_DATA_FOUND, StatusVarList.FAILED,null);
         }
     }
 
