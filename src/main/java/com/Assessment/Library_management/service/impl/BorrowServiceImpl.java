@@ -35,15 +35,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BorrowServiceImpl implements BorrowService {
     @Autowired
-    private  UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    private  BookRepository bookRepository;
+    private BookRepository bookRepository;
 
     @Autowired
-    private  BorrowedRecordRepository borrowingRecordRepository;
+    private BorrowedRecordRepository borrowingRecordRepository;
 
     private static final Logger log = LoggerFactory.getLogger(BorrowServiceImpl.class);
-
 
 
     @Override
@@ -98,8 +97,8 @@ public class BorrowServiceImpl implements BorrowService {
 
     @Override
     public ResponseEntity<?> borrowHistory(String userId) throws DataNotFounException {
-List<BorrowingRecordDTO> list = new ArrayList<>();
-        List<BorrowingRecord> records = borrowingRecordRepository.findByuser_userId(userId).orElseThrow(()-> new DataNotFounException("Borrow history not found for the user"));
+        List<BorrowingRecordDTO> list = new ArrayList<>();
+        List<BorrowingRecord> records = borrowingRecordRepository.findByuser_userId(userId).orElseThrow(() -> new DataNotFounException("Borrow history not found for the user"));
         records.forEach(borrowingRecord -> {
             BorrowingRecordDTO borrowingRecordDTO = new BorrowingRecordDTO();
             borrowingRecordDTO.setBorrowDate(borrowingRecord.getBorrowDate());
@@ -110,15 +109,15 @@ List<BorrowingRecordDTO> list = new ArrayList<>();
         });
 
 //        List<BorrowingRecordDTO> borrowedHistory = records.stream().map(BorrowingRecordDTO::fromEntity).collect(Collectors.toList());
-        if (!list.isEmpty()){
+        if (!list.isEmpty()) {
             log.debug("Borrowed history availble");
 
             return ResponseEntity.ok(list);
 //            return new ResponseBean(MessageVarList.RSP_SUCCESS, StatusVarList.BORROWED_HISTORY_AVAILABLE, borrowedHistory);
-        }else{
+        } else {
             log.debug("Borrowed history not availble");
             return ResponseEntity.ok(StatusVarList.BORROWED_HISTORY_NOT_AVAILABLE);
-      //      return new ResponseBean(MessageVarList.RSP_NO_DATA_FOUND, StatusVarList.BORROWED_HISTORY_NOT_AVAILABLE, borrowedHistory);
+            //      return new ResponseBean(MessageVarList.RSP_NO_DATA_FOUND, StatusVarList.BORROWED_HISTORY_NOT_AVAILABLE, borrowedHistory);
         }
     }
 }
